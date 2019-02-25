@@ -80,7 +80,7 @@ class ICS(ALG):
 
             # Levy fly for cuckoo
             for i in range(self.args.num_agents):
-                stepsize = self.args.step_size * levy_step * (global_best - cuckoo[i]) 
+                stepsize = self.args.step_size * levy_step #* (global_best - cuckoo[i]) 
                 cuckoo[i] += stepsize * np.random.normal(0, self.args.sigma, size=self.dimension)
 
             # Clipping with bound
