@@ -16,6 +16,9 @@ class CSA(ALG):
         # Get function's statistics
         self.get_function_statistics(function_name)      
 
+        self.num_seeds = int(self.args.num_agents*self.args.seed_ratio)
+
+
     def run(self):
         # Initialize the number of function called
         self.reset()
@@ -27,7 +30,6 @@ class CSA(ALG):
 
         self.position_history.append(np.copy(self.bank))
 
-
         for stage in range(self.args.iterations):
             print('Stage %d' % stage)
             # At the beginning of each stage d_cut is set as d_avg/2
@@ -37,12 +39,10 @@ class CSA(ALG):
             d_cut = d_avg / self.args.d_cut_initial
 
             self.num_solutions = self.bank.shape[0]
-            print('# of solutions in bank: %d' % self.num_solutions)
-
-            self.num_seeds = int(self.num_solutions*self.args.seed_ratio)
 
             for round in range(self.args.max_rounds):
                 print('\tRound %d' % round)
+                # Round is completed, all bank solutions are mareked as unused
                 self.bank_status = [False for _ in range(self.num_solutions)]
                 time = 0
                 while True:
@@ -50,7 +50,7 @@ class CSA(ALG):
  
                     # Seeds are selected from unused solutions
                     unselected_solution_idxs = np.where(np.asarray(self.bank_status) == False)[0].tolist()
-                    seed_idxs = self.get_seeds(unselected_solution_idxs, d_avg)
+                    seed_idxs = self.get_seeds(round, unselected_solution_idxs, d_avg)
     
                     # Daughter solutions are generated bank
                     seeds = self.bank[seed_idxs]
@@ -133,49 +133,53 @@ class CSA(ALG):
         return first_bank, bank
 
 
-    def get_seeds(self, unselected_idx, d_avg):
-        num_unused = len(unselected_idx)
-        if num_unused >= self.num_seeds:
-            seed_idxs = list()
-            # One is selected randomly, 
-            seed_idx = np.random.choice(unselected_idx, 1)[0]
-            seed_idxs.append(seed_idx)
-#            print('%d added to seeds' % seed_idx) 
-    
-            for _ in range(self.num_seeds-1):
-                over_avg_solutions = list()
-                under_avg_solutions = list()
-                unselected_idx.remove(seed_idx)
-                # Distances are measured between the selected seed and non-selected unused solutions.       
-                for i in unselected_idx:
-                    distance = self.get_distance(self.bank[seed_idx], self.bank[i])
-#                    print('For %d, distance: %.4f' % (i, distance))
-                    if self.get_distance(self.bank[seed_idx], self.bank[i]) > d_avg:
-                        over_avg_solutions.append((self.f(self.bank[i]), i))
-                    else:
-                        under_avg_solutions.append((self.f(self.bank[i]), i))
-
-                over_avg_solutions.sort()
-                if len(over_avg_solutions) == 0:
-                    under_avg_solutions.sort()
-                    seed_idx = under_avg_solutions[0][1]
-                else:
-                    seed_idx = over_avg_solutions[0][1]
-#                print('%d added to seeds' % seed_idx)
-                seed_idxs.append(seed_idx)
+    def get_seeds(self, round, unselected_idx, d_avg):
+        if round == 0:
+            seed_idxs = np.random.choice([i for i in range(self.num_solutions - self.args.num_agents, self.num_solutions)], size=self.num_seeds, replace=False).tolist()
 
         else:
-            seed_idxs = unselected_idx
-            for _ in range(self.num_seeds - len(seed_idxs)):
-                solutions = list()
-                for i in range(self.bank.shape[0]):
-                    if i in seed_idxs:
-                        continue
-                    solutions.append((self.f(self.bank[i]), i))
-                solutions.sort()
-                seed_idx = solutions[0][1]
-#                print('%d added to seeds' % seed_idx)
-                seed_idxs.append(seed_idx)                   
+            num_unused = len(unselected_idx)
+            if num_unused >= self.num_seeds:
+                seed_idxs = list()
+                # One is selected randomly, 
+                seed_idx = np.random.choice(unselected_idx, size=1, replace=False)[0]
+                seed_idxs.append(seed_idx)
+    #            print('%d added to seeds' % seed_idx) 
+        
+                for _ in range(self.num_seeds-1):
+                    over_avg_solutions = list()
+                    under_avg_solutions = list()
+                    unselected_idx.remove(seed_idx)
+                    # Distances are measured between the selected seed and non-selected unused solutions.       
+                    for i in unselected_idx:
+                        distance = self.get_distance(self.bank[seed_idx], self.bank[i])
+    #                    print('For %d, distance: %.4f' % (i, distance))
+                        if self.get_distance(self.bank[seed_idx], self.bank[i]) > d_avg:
+                            over_avg_solutions.append((self.f(self.bank[i]), i))
+                        else:
+                            under_avg_solutions.append((self.f(self.bank[i]), i))
+    
+                    over_avg_solutions.sort()
+                    if len(over_avg_solutions) == 0:
+                        under_avg_solutions.sort()
+                        seed_idx = under_avg_solutions[0][1]
+                    else:
+                        seed_idx = over_avg_solutions[0][1]
+    #                print('%d added to seeds' % seed_idx)
+                    seed_idxs.append(seed_idx)
+    
+            else:
+                seed_idxs = unselected_idx
+                for _ in range(self.num_seeds - len(seed_idxs)):
+                    solutions = list()
+                    for i in range(self.bank.shape[0]):
+                        if i in seed_idxs:
+                            continue
+                        solutions.append((self.f(self.bank[i]), i))
+                    solutions.sort()
+                    seed_idx = solutions[0][1]
+    #                print('%d added to seeds' % seed_idx)
+                    seed_idxs.append(seed_idx)                   
 
         # Mark selected seeds as used
         for seed_idx in seed_idxs:
