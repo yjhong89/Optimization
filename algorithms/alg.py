@@ -11,50 +11,50 @@ class ALG(object):
         self.correct_flag = False
         self.duration = 0
                     
-        # Function name: function, lb, ub, {dim:(min_value, coordinate}
+        # Function name: function, {dim:(min_value, coordinate, limits)}
         self.test_func = {
-            'eggholder_function':(tf.eggholder_function, -512, 512, \
-                        {2:(-959.6407, (512.0, 404.2318)), 
-                        5:(-3719.72, (485.590, 436.124, 451.083, 466.431, 421.959)), 
-                        10:(-8291.24, (480.85, 431.37, 444.91, 457.55, 471.96, 427.50, 442.09, 455.12, 469.43, 424.94)),
-                        20:(-17455.9, (481.0, 431.5, 445.1, 457.9, 472.4, 428.0, 443.0, 456.5, 471.7, 427.3, 442.5, 456.3, 471.6, 427.1, 442.5, 456.3, 471.7, 427.3, 442.8, 456.9))}),
-            'ackley_function':(tf.ackley_function, -35, 35, \
-                        (lambda x: 0, [0 for _ in range(self.args.dimension)])),
-            'bukin_function':(tf.bukin_function, -15, 15, \
-                        {2:(0, (-10, 1))}),
-            'cross_in_tray_function':(tf.cross_in_tray_function, -10, 10, \
-                        {2:(-2.06261, ((1.3491, -1.3491), (1.3491, 1.3491), (-1.3491, 1.3491), (-1.3491, -1.3491)))}),
-            'sphere_function':(tf.sphere_function, -5, 5, \
-                        (lambda x: 0, [0 for _ in range(self.args.dimension)])),
-            'bohachevsky_function':(tf.bohachevsky_function, -10, 10, \
-                        {2:(0, (0,0))}),
-            'sum_squares_function':(tf.sum_squares_function, -5.12, 5.12, \
-                        (lambda x: 0, [0 for _ in range(self.args.dimension)])),
-            'sum_of_different_powers_function':(tf.sum_of_different_powers_function, -1, 1, \
-                        (lambda x: 0, [0 for _ in range(self.args.dimension)])),
-            'booth_function':(tf.booth_function, -10, 10, \
-                        {2:(0, (1,3))}),
-            'matyas_function':(tf.matyas_function, -10, 10, \
-                        {2:(0, (0,0))}),
-            'mccormick_function':(tf.mccormick_function, -4, 4, \
-                        {2:(-1.9133, (-0.54719, -1.54719))}),
-            'dixon_price_function':(tf.dixon_price_function, -10, 10, \
-                        (lambda x: 0, [np.power(2, -((np.power(2, x)-2)/np.power(2, x))) for x in range(1, self.args.dimension)])),
-            'six_hump_camel_function':(tf.six_hump_camel_function, -3, 3, \
-                        {2:(-1.0316, ((0.0898, -0.7126), (-0.0898, 0.7126)))}),
-            'three_hump_camel_function':(tf.three_hump_camel_function, -5, 5, \
-                        {2:(0, (0,0))}),
-            'easom_function':(tf.easom_function, -20, 20, {2:(-1, (np.pi, np.pi))}),
-            'michalewicz_function':(tf.michalewicz_function, 0, np.pi,\
-                        {2:(-1.8013, (2,20, 1.57)),
-                        5:(-4.687658, (None)),
-                        10:(-9.66015, (None))}),
-            'beale_function':(tf.beale_function, -4.5, 4.5, \
-                        {2:(0, (3, 0.5))}),
-            'drop_wave_function':(tf.drop_wave_function, -5.12, 5.12, \
-                        {2:(-1, (0,0))}),
-            'griewank_function':(tf.griewank_function, -600, 600, \
-                        (lambda x: 0, [0 for _ in range(self.args.dimension)]))
+            'eggholder_function':(tf.eggholder_function, \
+                        {2:(-959.6407, (512.0, 404.2318), [(-512, 512) for _ in range(2)]), 
+                        5:(-3719.72, (485.590, 436.124, 451.083, 466.431, 421.959), [(-512, 512) for _ in range(5)]), 
+                        10:(-8291.24, (480.85, 431.37, 444.91, 457.55, 471.96, 427.50, 442.09, 455.12, 469.43, 424.94), [(-512, 512) for _ in range(10)]),
+                        20:(-17455.9, (481.0, 431.5, 445.1, 457.9, 472.4, 428.0, 443.0, 456.5, 471.7, 427.3, 442.5, 456.3, 471.6, 427.1, 442.5, 456.3, 471.7, 427.3, 442.8, 456.9), [(-512, 512) for _ in range(20)])}),
+            'ackley_function':(tf.ackley_function, \
+                        lambda x: (0, [0 for _ in range(x)], [(-32.768, 32.768) for _ in range(x)])),
+            'bukin_function':(tf.bukin_function, \
+                        {2:(0, (-10, 1), [(-15, -5), (-3, 3)])}),
+            'cross_in_tray_function':(tf.cross_in_tray_function, \
+                        {2:(-2.06261, ((1.3491, -1.3491), (1.3491, 1.3491), (-1.3491, 1.3491), (-1.3491, -1.3491)), [(-10, 10) for _ in range(2)])}),
+            'sphere_function':(tf.sphere_function, \
+                        lambda x: (0, [0 for _ in range(x)], [(-5, 5) for _ in range(x)])),
+            'bohachevsky_function':(tf.bohachevsky_function, \
+                        {2:(0, (0,0), [(-10, 10) for _ in range(2)])}),
+            'sum_squares_function':(tf.sum_squares_function, \
+                        lambda x: (0, [0 for _ in range(x)], [(-10, 10) for _ in range(x)])),
+            'sum_of_different_powers_function':(tf.sum_of_different_powers_function, \
+                        lambda x: (0, [0 for _ in range(x)], [(-1, 1) for _ in range(x)])),
+            'booth_function':(tf.booth_function, \
+                        {2:(0, (1,3), [(-10, 10) for _ in range(2)])}),
+            'matyas_function':(tf.matyas_function, \
+                        {2:(0, (0,0), [(-10, 10) for _ in range(2)])}),
+            'mccormick_function':(tf.mccormick_function, \
+                        {2:(-1.9133, (-0.54719, -1.54719), [(-1.5, 4), (-3, 4)])}),
+            'dixon_price_function':(tf.dixon_price_function, \
+                        lambda x: (0, [np.power(2, -((np.power(2, i)-2)/np.power(2, i))) for i in range(1, x+1)], [(-10, 10) for _ in range(x)])),
+            'six_hump_camel_function':(tf.six_hump_camel_function, \
+                        {2:(-1.0316, ((0.0898, -0.7126), (-0.0898, 0.7126)), [(-3, 3), (-2, 2)])}),
+            'three_hump_camel_function':(tf.three_hump_camel_function, \
+                        {2:(0, (0,0), [(-5, 5) for _ in range(2)])}),
+            'easom_function':(tf.easom_function, {2:(-1, (np.pi, np.pi), [(-100, 100) for _ in range(2)])}),
+            'michalewicz_function':(tf.michalewicz_function, \
+                        {2:(-1.8013, (2,20, 1.57), [(0, np.pi) for _ in range(2)]),
+                        5:(-4.687658, (None), [(0, np.pi) for _ in range(2)]),
+                        10:(-9.66015, (None), [(0, np.pi) for _ in range(2)])}),
+            'beale_function':(tf.beale_function, \
+                        {2:(0, (3, 0.5), [(-4.5, 4.5) for _ in range(2)])}),
+            'drop_wave_function':(tf.drop_wave_function, \
+                        {2:(-1, (0,0), [(-5.12, 5.12) for _ in range(2)])}),
+            'griewank_function':(tf.griewank_function, \
+                        lambda x: (0, [0 for _ in range(x)], [(-600, 600) for _ in range(x)]))
         }
 
     def reset(self):
@@ -75,21 +75,38 @@ class ALG(object):
     def get_function_statistics(self, function_name):
         function_info = self.test_func[function_name]
         self.f = function_info[0]
-        self.lower_bound = function_info[1]
-        self.upper_bound = function_info[2]
         self.dimension = self.args.dimension
 
-        if isinstance(function_info[3], dict):
-            if self.dimension not in function_info[3].keys():
+        if isinstance(function_info[1], dict):
+            if self.dimension not in function_info[1].keys():
                 raise KeyError
             else:
-                self.min_value = function_info[3][self.dimension][0]
-                self.real_coord = function_info[3][self.dimension][1]
+                f_info = function_info[1][self.dimension]
         else:
-            self.min_value = function_info[3][0](self.dimension)
-            self.real_coord = function_info[3][1]
+            f_info = function_info[1](self.dimension)
 
-    
+        self.min_value = f_info[0]
+        self.real_coord = f_info[1]
+        self.limits = f_info[2]
+
+    def make_new(self, num_new):
+        target = list()
+        for i in range(self.dimension):
+            target.append(np.random.uniform(self.limits[i][0], self.limits[i][1], (num_new,)))
+        # Make (self.args.num_agents, self.dimension)
+        target = np.stack(target, axis=1)
+        
+        return target
+
+    def clip_bound(self, before_clip):
+        after_clip = list()
+        for i in range(self.dimension):
+            after_clip.append(np.clip(before_clip[:,i], self.limits[i][0], self.limits[i][1]))
+        after_clip = np.stack(after_clip, axis=1)
+
+        return after_clip        
+
+
     def print_result(self, it, global_best, global_best_eval):
         print('\nAt iteration %d' % it)
         print('Optimization result with tolerance %.5f' % self.args.tolerance)

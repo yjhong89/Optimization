@@ -19,7 +19,7 @@ class PSO(ALG):
         self.reset()
 
         # Random initialization of agents between lower bound and upper bound of input parameters
-        self.agents = np.random.uniform(self.lower_bound, self.upper_bound, (self.args.num_agents, self.dimension))
+        self.agents = self.make_new(self.args.num_agents)
     
         # Add to position history
         self.position_history.append(np.copy(self.agents))
@@ -44,7 +44,7 @@ class PSO(ALG):
             velocity = self.args.w * velocity + self.args.c1*r1*(particle_best - self.agents) + self.args.c2*r2*(global_best - self.agents)
             self.agents += velocity
             # Clipping with bound
-            self.agents = np.clip(self.agents, self.lower_bound, self.upper_bound)
+            self.agents = self.clip_bound(self.agents)
     
             # Update particle's best position
             for i in range(self.args.num_agents):

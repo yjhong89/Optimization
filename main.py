@@ -65,7 +65,7 @@ if __name__ == "__main__":
         for alg in args.algorithm:      
             f.write('['+alg+']\n')            
             f.write('\tFor %d tests' % args.num_tests)
-            print('\tFor %d tests' % args.num_tests)
+            logging.info('For %d tests' % args.num_tests)
             logging.info('%s algorithm' % alg)
             module_name = 'algorithms.' + alg
             module = importlib.import_module(module_name)
@@ -97,9 +97,9 @@ if __name__ == "__main__":
                     f.write('\tAccuracy %.4f within tolerance %.4f\n' % (accuracy, args.tolerance))
                     f.write('\tAverage duration for optimization %.4f secs\n' % total_duration)
                     f.write('\tAverage number of function evaluation: %.4f\n' % num_func_evals)
-                    print('\tAccuracy %.4f within tolerance %.4f' % (accuracy, args.tolerance)) 
-                    print('\tAverage duration for optimization %.4f secs' % total_duration)
-                    print('\tAverage number of function evaluation: %.4f' % num_func_evals)
+                    logging.info('\tAccuracy %.4f within tolerance %.4f' % (accuracy, args.tolerance)) 
+                    logging.info('\tAverage duration for optimization %.4f secs' % total_duration)
+                    logging.info('\tAverage number of function evaluation: %.4f' % num_func_evals)
 
 #                logging.info('Global best position: %s'% opt.g_best)
 #    opt.animation(alg_name, opt.position_history, opt.f, opt.lower_bound, opt.upper_bound, save=False)  

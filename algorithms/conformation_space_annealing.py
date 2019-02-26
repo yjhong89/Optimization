@@ -124,7 +124,7 @@ class CSA(ALG):
 
     def create_banks(self):
         # First bank contains solutions that are randomly generated and each solutions are locally minimized
-        first_bank = np.random.uniform(self.lower_bound, self.upper_bound, (self.args.num_agents, self.dimension))
+        first_bank = self.make_new(self.args.num_agents)
         for i in range(first_bank.shape[0]):
             first_bank[i] = self.local_minimize(first_bank[i])
         # The bank holds the evolving population and initially identical to the first bank
@@ -277,7 +277,7 @@ class CSA(ALG):
             self.bank[worst_bank_index] = daughter_solution
             self.bank_status[worst_bank_index] = False
 
-        self.bank = np.clip(self.bank, self.lower_bound, self.upper_bound)
+        self.bank = self.clip_bound(self.bank)
 
 #        print('Bank after update')
 #        print(self.bank)
@@ -304,7 +304,7 @@ class CSA(ALG):
 
     def local_minimize(self, param):
         # param range: [(min1, max1), (min2, max2)..]
-        param_range = [(self.lower_bound, self.upper_bound)] * self.dimension
+        param_range = [(self.limits[i][0], self.limits[i][1]) for i in range(self.dimension)]
 
         # OptimizeResult object
         res = optimize.minimize(self.f, param, method='L-BFGS-B', bounds=param_range, options={'maxiter':self.args.min_maxiter})

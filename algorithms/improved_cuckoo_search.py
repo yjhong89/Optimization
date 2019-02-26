@@ -18,10 +18,9 @@ class ICS(ALG):
         self.reset()
 
         # Random initial nests
-        self.nests = np.random.uniform(self.lower_bound, self.upper_bound, (self.args.num_agents, self.dimension))
-
         # Random initial cuckoo
-        cuckoo = np.random.uniform(self.lower_bound, self.upper_bound, (self.args.num_cuckoo, self.dimension))
+        self.nests = self.make_new(self.args.num_agents)
+        cuckoo = self.make_new(self.args.num_agents)
 
         self.position_history.append(np.copy(self.nests))
 
@@ -61,16 +60,15 @@ class ICS(ALG):
             '''
             for i in worst_nests_idx:
                 if np.random.rand() <= self.args.prob_genetic_replace:  
-                    self.nests[i] = np.random.uniform(self.lower_bound, self.upper_bound, (1, self.dimension))
+                    self.nests[i] = self.make_new(1)
                 else:
                     # Select two parents among good nests
                     parents_idx = np.random.choice(best_nests_idx, 2, replace=False)
                     self.nests[i] = self.genetic_replace(parents_idx)
 
-
             # Clipping with bound
             # Add new objective, if not, all of 'self.nests' will be updated to latest one.
-            self.nests = np.clip(self.nests, self.lower_bound, self.upper_bound)
+            self.nests = self.clip_bound(self.nests)
 
             # Update cuckoo's position 
             # cuckoo's next generation
@@ -84,7 +82,7 @@ class ICS(ALG):
                 cuckoo[i] += stepsize * np.random.normal(0, self.args.sigma, size=self.dimension)
 
             # Clipping with bound
-            cuckoo = np.clip(cuckoo, self.lower_bound, self.upper_bound)
+            cuckoo = self.clip_bound(cuckoo)
             
             current_best = self.nests[np.array([self.f(x) for x in self.nests]).argmin()]
             global_best_eval = self.f(global_best)
