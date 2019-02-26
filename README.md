@@ -15,3 +15,4 @@ Benchmarks for meta-heuristic optimization algorithms
   * [Conformation Space Annealing](https://www.sciencedirect.com/science/article/pii/S0010465517303351)
 
 ### Benchmark functions
+Refers to https://www.sfu.ca/~ssurjano/optimization.html
