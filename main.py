@@ -47,7 +47,7 @@ if __name__ == "__main__":
     parser.add_argument('--min_maxiter', type=int, default=1000)
 
     parser.set_defaults(algorithm=['improved_cuckoo_search', 'particle_swarm_optimization', 'cuckoo_search', 'conformation_space_annealing'], 
-                        iterations=500000, 
+                        iterations=100000, 
                         num_agents=16,
                         dimension=2,
                         func='eggholder',
