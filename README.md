@@ -9,3 +9,5 @@ Benchmarks for meta-heuristic optimization algorithms
 
 ### Kinds of meta-heuristic algorithms
 * [Cuckoo Search](https://www.cs.tufts.edu/comp/150GA/homeworks/hw3/_reading7%20Cuckoo%20search.pdf)
+* [Improved Cuckoo Search](https://ieeexplore.ieee.org/document/8412665)
+  + Improved version of cuckoo search with genetic algorithm.
