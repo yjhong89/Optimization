@@ -46,7 +46,7 @@ if __name__ == "__main__":
     parser.add_argument('--d_cut_low', type=float, default=5.0)
     parser.add_argument('--min_maxiter', type=int, default=1000)
 
-    parser.set_defaults(algorithm=['improved_cuckoo_search', 'particle_swarm_optimization', 'cuckoo_search', 'conformation_space_annealing'], 
+    parser.set_defaults(algorithm=['conformation_space_annealing'], #'particle_swarm_optimization', 'cuckoo_search', 'conformation_space_annealing'], 
                         iterations=100000, 
                         num_agents=16,
                         dimension=2,
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     # Set logging format
     logging.basicConfig(level=logging.INFO, format='[%(levelname)s][%(filename)s:%(lineno)d]: %(message)s]')
 
-    with open(args.test_result, 'w') as f:
+    with open(args.test_result, 'a') as f:
     
         for alg in args.algorithm:      
             f.write('['+alg+']\n')            

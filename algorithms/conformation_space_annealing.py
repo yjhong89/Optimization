@@ -6,7 +6,7 @@ import math
 import numpy as np
 from algorithms.alg import ALG
 from scipy import optimize
-from time import time
+from time import time as measure_time
 
 
 class CSA(ALG): 
@@ -100,14 +100,14 @@ class CSA(ALG):
 #                    print('# of unused solutions: %d\n' % num_unused)
                     
                     time += 1
-                    if num_unused < self.args.num_unused:
+                    if (num_unused < self.args.num_unused) or (time % 100 == 0):
                         break 
 
 
             self.print_result(stage, global_best, global_best_eval)
             if abs(self.min_value - global_best_eval) <= self.args.tolerance:
                 self.correct_flag = True
-                self.duration = time() - self.start_time
+                self.duration = measure_time() - self.start_time
                 break
 
 
@@ -229,7 +229,7 @@ class CSA(ALG):
 
         origin_param = daughter[mutation_index] 
 
-        if i in range(len(origin_param)):
+        for i in range(len(origin_param)):
             mutate_param = np.random.uniform((1-mutate_range)*origin_param[i], (1+mutate_range)*origin_param[i])
             daughter[mutation_index[i]] = mutate_param
 
