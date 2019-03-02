@@ -47,8 +47,8 @@ class ALG(object):
             'easom_function':(tf.easom_function, {2:(-1, (np.pi, np.pi), [(-100, 100) for _ in range(2)])}),
             'michalewicz_function':(tf.michalewicz_function, \
                         {2:(-1.8013, (2,20, 1.57), [(0, np.pi) for _ in range(2)]),
-                        5:(-4.687658, (None), [(0, np.pi) for _ in range(2)]),
-                        10:(-9.66015, (None), [(0, np.pi) for _ in range(2)])}),
+                        5:(-4.687658, (None), [(0, np.pi) for _ in range(5)]),
+                        10:(-9.66015, (None), [(0, np.pi) for _ in range(10)])}),
             'beale_function':(tf.beale_function, \
                         {2:(0, (3, 0.5), [(-4.5, 4.5) for _ in range(2)])}),
             'drop_wave_function':(tf.drop_wave_function, \

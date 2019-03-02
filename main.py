@@ -46,14 +46,14 @@ if __name__ == "__main__":
     parser.add_argument('--d_cut_low', type=float, default=5.0)
     parser.add_argument('--min_maxiter', type=int, default=1000)
 
-    parser.set_defaults(algorithm=['conformation_space_annealing'], #'particle_swarm_optimization', 'cuckoo_search', 'conformation_space_annealing'], 
+    parser.set_defaults(algorithm=['improved_cuckoo_search', 'particle_swarm_optimization', 'cuckoo_search', 'conformation_space_annealing'], 
                         iterations=100000, 
                         num_agents=16,
-                        dimension=2,
+                        dimension=5,
                         func='eggholder',
                         tolerance=1e-2,
                         num_tests=100,
-                        test_result='test_result.txt')
+                        test_result='test_result_dim5.txt')
 
     args = parser.parse_args()
 
